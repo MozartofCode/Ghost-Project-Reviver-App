@@ -1,25 +1,46 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { RepoCard } from '@/components/repository/repo-card'
-import { Sparkles, Search, Filter } from 'lucide-react'
-import { getMockRepositories, filterRepositories } from '@/lib/mock-data'
+import { Sparkles, Search, Filter, Plus, Loader2 } from 'lucide-react'
+import type { Repository } from '@/types'
 
 export default function ExplorePage() {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedLanguage, setSelectedLanguage] = useState('all')
     const [selectedStatus, setSelectedStatus] = useState('all')
+    const [repositories, setRepositories] = useState<Repository[]>([])
+    const [loading, setLoading] = useState(true)
+    const [showImportModal, setShowImportModal] = useState(false)
 
-    const allRepos = getMockRepositories()
-    const filteredRepos = filterRepositories({
-        language: selectedLanguage,
-        status: selectedStatus,
-        query: searchQuery
-    })
+    useEffect(() => {
+        fetchRepositories()
+    }, [selectedLanguage, selectedStatus, searchQuery])
 
-    const languages = ['all', 'JavaScript', 'TypeScript', 'Python', 'Go']
+    const fetchRepositories = async () => {
+        setLoading(true)
+        try {
+            const params = new URLSearchParams()
+            if (selectedLanguage !== 'all') params.append('language', selectedLanguage)
+            if (selectedStatus !== 'all') params.append('status', selectedStatus)
+            if (searchQuery) params.append('query', searchQuery)
+
+            const response = await fetch(`/api/repositories?${params}`)
+            const data = await response.json()
+
+            if (data.repositories) {
+                setRepositories(data.repositories)
+            }
+        } catch (error) {
+            console.error('Error fetching repositories:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const languages = ['all', 'JavaScript', 'TypeScript', 'Python', 'Go', 'Rust', 'Java']
     const statuses = ['all', 'abandoned', 'at-risk', 'reviving']
 
     return (
@@ -33,6 +54,15 @@ export default function ExplorePage() {
                             <span className="text-xl font-bold gradient-text">Project Phoenix</span>
                         </Link>
                         <div className="flex items-center gap-4">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => setShowImportModal(true)}
+                                className="gap-2"
+                            >
+                                <Plus className="w-4 h-4" />
+                                Import Repo
+                            </Button>
                             <Link href="/dashboard">
                                 <Button variant="ghost" size="sm">Dashboard</Button>
                             </Link>
@@ -51,7 +81,7 @@ export default function ExplorePage() {
                         Explore <span className="gradient-text">Abandoned Projects</span>
                     </h1>
                     <p className="text-gray-400">
-                        Discover {allRepos.length} repositories waiting to be revived
+                        Discover repositories waiting to be revived
                     </p>
                 </div>
 
@@ -140,13 +170,24 @@ export default function ExplorePage() {
 
                 {/* Results Count */}
                 <div className="mb-6 text-sm text-gray-400">
-                    Showing <span className="text-white font-semibold">{filteredRepos.length}</span> repositories
+                    {loading ? (
+                        <div className="flex items-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Loading repositories...
+                        </div>
+                    ) : (
+                        <>Showing <span className="text-white font-semibold">{repositories.length}</span> repositories</>
+                    )}
                 </div>
 
                 {/* Repository Grid */}
-                {filteredRepos.length > 0 ? (
+                {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="w-12 h-12 animate-spin text-phoenix-primary" />
+                    </div>
+                ) : repositories.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredRepos.map(repo => (
+                        {repositories.map(repo => (
                             <RepoCard key={repo.id} repo={repo} />
                         ))}
                     </div>
@@ -155,20 +196,139 @@ export default function ExplorePage() {
                         <Filter className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                         <h3 className="text-xl font-semibold mb-2">No repositories found</h3>
                         <p className="text-gray-400 mb-4">
-                            Try adjusting your filters or search query
+                            {searchQuery || selectedLanguage !== 'all' || selectedStatus !== 'all'
+                                ? 'Try adjusting your filters or search query'
+                                : 'No repositories have been added yet. Import one to get started!'}
                         </p>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setSearchQuery('')
-                                setSelectedLanguage('all')
-                                setSelectedStatus('all')
-                            }}
-                        >
-                            Clear Filters
-                        </Button>
+                        <div className="flex gap-4 justify-center">
+                            {(searchQuery || selectedLanguage !== 'all' || selectedStatus !== 'all') && (
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setSearchQuery('')
+                                        setSelectedLanguage('all')
+                                        setSelectedStatus('all')
+                                    }}
+                                >
+                                    Clear Filters
+                                </Button>
+                            )}
+                            <Button onClick={() => setShowImportModal(true)} className="gap-2">
+                                <Plus className="w-4 h-4" />
+                                Import Repository
+                            </Button>
+                        </div>
                     </div>
                 )}
+            </div>
+
+            {/* Import Modal */}
+            {showImportModal && (
+                <ImportRepoModal
+                    onClose={() => setShowImportModal(false)}
+                    onSuccess={() => {
+                        setShowImportModal(false)
+                        fetchRepositories()
+                    }}
+                />
+            )}
+        </div>
+    )
+}
+
+function ImportRepoModal({
+    onClose,
+    onSuccess,
+}: {
+    onClose: () => void
+    onSuccess: () => void
+}) {
+    const [repoName, setRepoName] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+
+    const handleImport = async () => {
+        if (!repoName.trim()) {
+            setError('Please enter a repository name')
+            return
+        }
+
+        setLoading(true)
+        setError('')
+
+        try {
+            const response = await fetch('/api/repositories/import', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ repoFullName: repoName.trim() }),
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                setError(data.error || 'Failed to import repository')
+                return
+            }
+
+            onSuccess()
+        } catch (err: any) {
+            setError(err.message || 'Failed to import repository')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="glass-card p-8 max-w-md w-full">
+                <h2 className="text-2xl font-bold mb-4">Import Repository</h2>
+                <p className="text-gray-400 mb-6">
+                    Enter the full name of a GitHub repository (e.g., facebook/react)
+                </p>
+
+                <input
+                    type="text"
+                    placeholder="owner/repository"
+                    value={repoName}
+                    onChange={(e) => setRepoName(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleImport()}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-phoenix-primary transition mb-4"
+                    disabled={loading}
+                />
+
+                {error && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+                        {error}
+                    </div>
+                )}
+
+                <div className="flex gap-3">
+                    <Button
+                        variant="secondary"
+                        onClick={onClose}
+                        disabled={loading}
+                        className="flex-1"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleImport}
+                        disabled={loading}
+                        className="flex-1 gap-2"
+                    >
+                        {loading ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Importing...
+                            </>
+                        ) : (
+                            <>
+                                <Plus className="w-4 h-4" />
+                                Import
+                            </>
+                        )}
+                    </Button>
+                </div>
             </div>
         </div>
     )
