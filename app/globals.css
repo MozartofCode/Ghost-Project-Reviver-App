@@ -34,76 +34,133 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   body {
-    @apply bg-phoenix-dark text-foreground;
+    background-color: #0a0e27;
+    color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
-    @apply bg-phoenix-darker;
+    background-color: #050812;
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    @apply bg-phoenix-primary/30 rounded;
+    background-color: rgba(99, 102, 241, 0.3);
+    border-radius: 0.25rem;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-phoenix-primary/50;
+    background-color: rgba(99, 102, 241, 0.5);
   }
 }
 
 @layer components {
+
   /* Glassmorphism card effect */
   .glass-card {
-    @apply bg-phoenix-darker/70 backdrop-blur-md border border-white/10 rounded-lg;
+    background-color: rgba(5, 8, 18, 0.7);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
   }
-  
+
   .glass-card:hover {
-    @apply border-white/20;
+    border-color: rgba(255, 255, 255, 0.2);
   }
-  
+
   /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-phoenix-primary via-purple-500 to-phoenix-accent bg-clip-text text-transparent;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  
+
   /* Status badges */
   .badge-active {
-    @apply px-3 py-1 rounded-full text-xs font-medium bg-status-active/20 text-status-active border border-status-active/30;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
   }
-  
+
   .badge-at-risk {
-    @apply px-3 py-1 rounded-full text-xs font-medium bg-status-at-risk/20 text-status-at-risk border border-status-at-risk/30;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
   }
-  
+
   .badge-abandoned {
-    @apply px-3 py-1 rounded-full text-xs font-medium bg-status-abandoned/20 text-status-abandoned border border-status-abandoned/30;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
   }
-  
+
   .badge-reviving {
-    @apply px-3 py-1 rounded-full text-xs font-medium bg-status-reviving/20 text-status-reviving border border-status-reviving/30;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.3);
   }
-  
+
   /* Button styles */
   .btn-primary {
-    @apply px-6 py-3 bg-phoenix-primary hover:bg-phoenix-primary-light text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-phoenix-primary/20 hover:shadow-phoenix-primary/40 hover:-translate-y-0.5;
+    padding: 0.75rem 1.5rem;
+    background-color: #6366f1;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
   }
-  
+
+  .btn-primary:hover {
+    background-color: #818cf8;
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+  }
+
   .btn-secondary {
-    @apply px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300;
+    padding: 0.75rem 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 }
 
 @layer utilities {
+
   /* Reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     * {
