@@ -18,12 +18,9 @@ export async function GET(
         // Get all squads for this repo
         const { data: squads, error } = await supabase
             .from('squads')
-            .select(`
-        *,
-        creator:users!squads_created_by_fkey(id, username, avatar_url)
-      `)
+            .select('*')
             .eq('repo_id', repoId)
-            .eq('is_active', true)
+            // .eq('is_active', true) // Column doesn't exist
             .order('created_at', { ascending: false })
 
         if (error) {

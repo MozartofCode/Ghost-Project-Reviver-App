@@ -17,10 +17,7 @@ export async function GET(
         // Get squad with creator info
         const { data: squad, error: squadError } = await supabase
             .from('squads')
-            .select(`
-        *,
-        creator:users!squads_created_by_fkey(id, username, avatar_url)
-      `)
+            .select('*')
             .eq('id', squadId)
             .single()
 
@@ -91,16 +88,17 @@ export async function PATCH(
 
         const supabase = createServiceClient()
 
-        // Check if user is the creator
-        const { data: squad } = await supabase
-            .from('squads')
-            .select('created_by')
-            .eq('id', squadId)
+        // Check if user is the lead of the squad
+        const { data: membership } = await supabase
+            .from('squad_members')
+            .select('role')
+            .eq('squad_id', squadId)
+            .eq('user_id', session.userId)
             .single()
 
-        if (!squad || squad.created_by !== session.userId) {
+        if (!membership || membership.role !== 'lead') {
             return NextResponse.json(
-                { error: 'Only the squad creator can update this squad' },
+                { error: 'Only the squad lead can update this squad' },
                 { status: 403 }
             )
         }
@@ -109,7 +107,7 @@ export async function PATCH(
         const updateData: any = {}
         if (name !== undefined) updateData.name = name
         if (description !== undefined) updateData.description = description
-        if (is_active !== undefined) updateData.is_active = is_active
+        // if (is_active !== undefined) updateData.is_active = is_active // Column doesn't exist
 
         const { data: updatedSquad, error } = await supabase
             .from('squads')
@@ -160,19 +158,27 @@ export async function DELETE(
         const { squadId } = params
         const supabase = createServiceClient()
 
-        // Check if user is the creator
-        const { data: squad } = await supabase
-            .from('squads')
-            .select('created_by, name')
-            .eq('id', squadId)
+        // Check if user is the lead
+        const { data: membership } = await supabase
+            .from('squad_members')
+            .select('role')
+            .eq('squad_id', squadId)
+            .eq('user_id', session.userId)
             .single()
 
-        if (!squad || squad.created_by !== session.userId) {
+        if (!membership || membership.role !== 'lead') {
             return NextResponse.json(
-                { error: 'Only the squad creator can delete this squad' },
+                { error: 'Only the squad lead can delete this squad' },
                 { status: 403 }
             )
         }
+
+        // Get squad name for message
+        const { data: squad } = await supabase
+            .from('squads')
+            .select('name')
+            .eq('id', squadId)
+            .single()
 
         // Delete squad (cascade will delete members)
         const { error } = await supabase
@@ -189,7 +195,7 @@ export async function DELETE(
         }
 
         return NextResponse.json({
-            message: `Squad "${squad.name}" deleted successfully`
+            message: `Squad "${squad?.name || 'deleted'}" deleted successfully`
         })
     } catch (error) {
         console.error('Delete squad error:', error)

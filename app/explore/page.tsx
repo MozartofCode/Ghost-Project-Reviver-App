@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { RepoCard } from '@/components/repository/repo-card'
 import { Sparkles, Search, Filter, Plus, Loader2 } from 'lucide-react'
+import { Navbar } from '@/components/layout/navbar'
 import type { Repository } from '@/types'
 
 export default function ExplorePage() {
@@ -44,60 +45,33 @@ export default function ExplorePage() {
     const statuses = ['all', 'abandoned', 'at-risk', 'reviving']
 
     return (
-        <div className="min-h-screen bg-phoenix-dark">
-            {/* Navigation */}
-            <nav className="border-b border-white/10 backdrop-blur-lg bg-phoenix-dark/80 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <Link href="/" className="flex items-center gap-2">
-                            <Sparkles className="w-8 h-8 text-phoenix-accent" />
-                            <span className="text-xl font-bold gradient-text">Project Phoenix</span>
-                        </Link>
-                        <div className="flex items-center gap-4">
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={() => setShowImportModal(true)}
-                                className="gap-2"
-                            >
-                                <Plus className="w-4 h-4" />
-                                Import Repo
-                            </Button>
-                            <Link href="/dashboard">
-                                <Button variant="ghost" size="sm">Dashboard</Button>
-                            </Link>
-                            <Link href="/auth/login">
-                                <Button variant="primary" size="sm">Sign In</Button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+        <div className="min-h-screen bg-cream">
+            <Navbar />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold mb-2">
-                        Explore <span className="gradient-text">Abandoned Projects</span>
+                    <h1 className="text-4xl font-bold mb-2 text-forest-900">
+                        Explore <span className="text-forest-600">Abandoned Projects</span>
                     </h1>
-                    <p className="text-gray-400">
+                    <p className="text-forest-600">
                         Discover repositories waiting to be revived
                     </p>
                 </div>
 
                 {/* Search and Filters */}
-                <div className="glass-card p-6 mb-8">
+                <div className="bg-white border-2 border-forest-100 rounded-3xl shadow-organic p-6 mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {/* Search */}
                         <div className="md:col-span-2">
                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-forest-400" />
                                 <input
                                     type="text"
                                     placeholder="Search repositories..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-phoenix-primary transition"
+                                    className="w-full pl-10 pr-4 py-3 bg-cream border-2 border-forest-100 rounded-xl text-forest-900 placeholder-forest-400 focus:outline-none focus:border-forest-600 transition"
                                 />
                             </div>
                         </div>
@@ -107,11 +81,11 @@ export default function ExplorePage() {
                             <select
                                 value={selectedLanguage}
                                 onChange={(e) => setSelectedLanguage(e.target.value)}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-phoenix-primary transition appearance-none cursor-pointer"
+                                className="w-full px-4 py-3 bg-cream border-2 border-forest-100 rounded-xl text-forest-900 focus:outline-none focus:border-forest-600 transition appearance-none cursor-pointer"
                             >
                                 <option value="all">All Languages</option>
                                 {languages.slice(1).map(lang => (
-                                    <option key={lang} value={lang} className="bg-phoenix-darker">
+                                    <option key={lang} value={lang} className="bg-white">
                                         {lang}
                                     </option>
                                 ))}
@@ -123,11 +97,11 @@ export default function ExplorePage() {
                             <select
                                 value={selectedStatus}
                                 onChange={(e) => setSelectedStatus(e.target.value)}
-                                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-phoenix-primary transition appearance-none cursor-pointer"
+                                className="w-full px-4 py-3 bg-cream border-2 border-forest-100 rounded-xl text-forest-900 focus:outline-none focus:border-forest-600 transition appearance-none cursor-pointer"
                             >
                                 <option value="all">All Statuses</option>
                                 {statuses.slice(1).map(status => (
-                                    <option key={status} value={status} className="bg-phoenix-darker">
+                                    <option key={status} value={status} className="bg-white">
                                         {status.replace('-', ' ').toUpperCase()}
                                     </option>
                                 ))}
@@ -138,19 +112,19 @@ export default function ExplorePage() {
                     {/* Active Filters */}
                     {(searchQuery || selectedLanguage !== 'all' || selectedStatus !== 'all') && (
                         <div className="mt-4 flex items-center gap-2 flex-wrap">
-                            <span className="text-sm text-gray-400">Active filters:</span>
+                            <span className="text-sm text-forest-600">Active filters:</span>
                             {searchQuery && (
-                                <span className="px-3 py-1 bg-phoenix-primary/20 text-phoenix-primary rounded-full text-sm">
+                                <span className="px-3 py-1 bg-forest-100 text-forest-700 rounded-full text-sm">
                                     Search: {searchQuery}
                                 </span>
                             )}
                             {selectedLanguage !== 'all' && (
-                                <span className="px-3 py-1 bg-phoenix-primary/20 text-phoenix-primary rounded-full text-sm">
+                                <span className="px-3 py-1 bg-forest-100 text-forest-700 rounded-full text-sm">
                                     {selectedLanguage}
                                 </span>
                             )}
                             {selectedStatus !== 'all' && (
-                                <span className="px-3 py-1 bg-phoenix-primary/20 text-phoenix-primary rounded-full text-sm">
+                                <span className="px-3 py-1 bg-forest-100 text-forest-700 rounded-full text-sm">
                                     {selectedStatus.replace('-', ' ')}
                                 </span>
                             )}
@@ -160,7 +134,7 @@ export default function ExplorePage() {
                                     setSelectedLanguage('all')
                                     setSelectedStatus('all')
                                 }}
-                                className="text-sm text-gray-400 hover:text-white transition"
+                                className="text-sm text-forest-500 hover:text-forest-800 transition underline"
                             >
                                 Clear all
                             </button>
@@ -183,7 +157,7 @@ export default function ExplorePage() {
                 {/* Repository Grid */}
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <Loader2 className="w-12 h-12 animate-spin text-phoenix-primary" />
+                        <Loader2 className="w-12 h-12 animate-spin text-forest-700" />
                     </div>
                 ) : repositories.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -192,10 +166,10 @@ export default function ExplorePage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="glass-card p-12 text-center">
-                        <Filter className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold mb-2">No repositories found</h3>
-                        <p className="text-gray-400 mb-4">
+                    <div className="bg-white border-2 border-forest-100 rounded-3xl shadow-organic p-12 text-center">
+                        <Filter className="w-16 h-16 text-forest-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold mb-2 text-forest-800">No repositories found</h3>
+                        <p className="text-forest-500 mb-4">
                             {searchQuery || selectedLanguage !== 'all' || selectedStatus !== 'all'
                                 ? 'Try adjusting your filters or search query'
                                 : 'No repositories have been added yet. Import one to get started!'}
@@ -213,7 +187,7 @@ export default function ExplorePage() {
                                     Clear Filters
                                 </Button>
                             )}
-                            <Button onClick={() => setShowImportModal(true)} className="gap-2">
+                            <Button onClick={() => setShowImportModal(true)} className="gap-2 bg-forest-700 hover:bg-forest-800 text-white">
                                 <Plus className="w-4 h-4" />
                                 Import Repository
                             </Button>
@@ -280,9 +254,9 @@ function ImportRepoModal({
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="glass-card p-8 max-w-md w-full">
-                <h2 className="text-2xl font-bold mb-4">Import Repository</h2>
-                <p className="text-gray-400 mb-6">
+            <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border-2 border-forest-100">
+                <h2 className="text-2xl font-bold mb-4 text-forest-900">Import Repository</h2>
+                <p className="text-forest-600 mb-6">
                     Enter the full name of a GitHub repository (e.g., facebook/react)
                 </p>
 
@@ -292,12 +266,12 @@ function ImportRepoModal({
                     value={repoName}
                     onChange={(e) => setRepoName(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleImport()}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-phoenix-primary transition mb-4"
+                    className="w-full px-4 py-3 bg-cream border-2 border-forest-100 rounded-xl text-forest-900 placeholder-forest-400 focus:outline-none focus:border-forest-600 transition mb-4"
                     disabled={loading}
                 />
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
                         {error}
                     </div>
                 )}
@@ -314,7 +288,7 @@ function ImportRepoModal({
                     <Button
                         onClick={handleImport}
                         disabled={loading}
-                        className="flex-1 gap-2"
+                        className="flex-1 gap-2 bg-forest-700 hover:bg-forest-800 text-white"
                     >
                         {loading ? (
                             <>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Github, Sprout, Users, Zap, ArrowRight, Code2, Heart, TrendingUp, Leaf, Recycle, Sun, Loader2 } from 'lucide-react'
 import type { Repository } from '@/types'
+import { Navbar } from '@/components/layout/navbar'
 
 export default function Home() {
   const [featuredRepos, setFeaturedRepos] = useState<Repository[]>([])
@@ -76,28 +77,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-cream font-sans">
       {/* Navigation - Floating Organic Bar */}
-      <nav className="fixed w-full z-50 pt-6 px-4">
-        <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-md rounded-full shadow-organic border border-forest-100 px-6 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="bg-forest-100 p-2 rounded-full">
-              <Leaf className="w-5 h-5 text-forest-600 fill-forest-600" />
-            </div>
-            <span className="text-xl font-bold text-forest-800 tracking-tight">Project Phoenix</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-forest-600 font-medium">
-            <Link href="/explore" className="hover:text-forest-800 transition-colors">Explore</Link>
-            <Link href="#" className="hover:text-forest-800 transition-colors">Community</Link>
-            <Link href="#" className="hover:text-forest-800 transition-colors">Resources</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/auth/login">
-              <Button className="rounded-full bg-forest-700 hover:bg-forest-800 text-white px-6">
-                Sign In
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-40 pb-24 px-4 overflow-hidden relative">

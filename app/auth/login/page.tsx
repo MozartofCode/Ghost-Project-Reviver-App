@@ -34,7 +34,10 @@ export default function LoginPage() {
         }
     }, [searchParams])
 
+    const [loading, setLoading] = useState(false)
+
     const handleGitHubLogin = () => {
+        setLoading(true)
         // Redirect to our custom GitHub OAuth endpoint
         window.location.href = '/api/auth/github'
     }
@@ -70,11 +73,16 @@ export default function LoginPage() {
                 <Card className="bg-white border-2 border-forest-100 rounded-3xl shadow-organic p-8">
                     <Button
                         onClick={handleGitHubLogin}
+                        disabled={loading}
                         size="lg"
                         className="w-full gap-3 h-14 rounded-2xl bg-forest-700 hover:bg-forest-800 text-white text-lg shadow-lg shadow-forest-700/20 hover:shadow-xl hover:scale-105 transition-all"
                     >
-                        <Github className="w-6 h-6" />
-                        Continue with GitHub
+                        {loading ? 'Redirecting...' : (
+                            <>
+                                <Github className="w-6 h-6" />
+                                Continue with GitHub
+                            </>
+                        )}
                     </Button>
 
                     <div className="mt-6 text-center text-sm text-forest-500">

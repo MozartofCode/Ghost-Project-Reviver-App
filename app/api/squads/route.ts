@@ -15,11 +15,8 @@ export async function GET(request: NextRequest) {
 
         let query = supabase
             .from('squads')
-            .select(`
-        *,
-        creator:users!squads_created_by_fkey(id, username, avatar_url)
-      `)
-            .eq('is_active', true)
+            .select('*')
+            // .eq('is_active', true) // Column doesn't exist
             .order('created_at', { ascending: false })
 
         if (repoId) {
@@ -80,7 +77,7 @@ export async function POST(request: NextRequest) {
                 repo_id,
                 name,
                 description: description || null,
-                created_by: session.userId,
+                // created_by: session.userId, // Column doesn't exist
             })
             .select()
             .single()
@@ -108,7 +105,7 @@ export async function POST(request: NextRequest) {
             .insert({
                 squad_id: squad.id,
                 user_id: session.userId,
-                role: 'creator',
+                role: 'lead', // Schema uses 'lead' not 'creator'
             })
 
         if (memberError) {

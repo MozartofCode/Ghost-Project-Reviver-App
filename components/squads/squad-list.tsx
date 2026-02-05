@@ -23,8 +23,8 @@ export function SquadList({ repoId, isAuthenticated }: SquadListProps) {
         fetchSquads()
     }, [repoId])
 
-    const fetchSquads = async () => {
-        setLoading(true)
+    const fetchSquads = async (shouldSetLoading = true) => {
+        if (shouldSetLoading) setLoading(true)
         try {
             const response = await fetch(`/api/repositories/${repoId}/squads`)
             const data = await response.json()
@@ -35,7 +35,7 @@ export function SquadList({ repoId, isAuthenticated }: SquadListProps) {
         } catch (error) {
             console.error('Error fetching squads:', error)
         } finally {
-            setLoading(false)
+            if (shouldSetLoading) setLoading(false)
         }
     }
 
@@ -53,7 +53,7 @@ export function SquadList({ repoId, isAuthenticated }: SquadListProps) {
             }
 
             // Refresh squads to update membership status
-            await fetchSquads()
+            await fetchSquads(false)
         } catch (error) {
             console.error('Error joining squad:', error)
             alert('Failed to join squad')
@@ -76,7 +76,7 @@ export function SquadList({ repoId, isAuthenticated }: SquadListProps) {
             }
 
             // Refresh squads to update membership status
-            await fetchSquads()
+            await fetchSquads(false)
         } catch (error) {
             console.error('Error leaving squad:', error)
             alert('Failed to leave squad')
@@ -85,7 +85,7 @@ export function SquadList({ repoId, isAuthenticated }: SquadListProps) {
 
     const handleSquadCreated = () => {
         setShowCreateModal(false)
-        fetchSquads()
+        fetchSquads(false)
     }
 
     if (loading) {
