@@ -12,6 +12,8 @@ import {
 } from 'lucide-react'
 import { formatNumber, getRelativeTime, cn } from '@/lib/utils'
 import type { Repository } from '@/types'
+import { SquadList } from '@/components/squads/squad-list'
+import { getCurrentUser } from '@/lib/auth/client'
 
 export default function RepositoryDetailPage({
     params,
@@ -22,11 +24,18 @@ export default function RepositoryDetailPage({
     const [repo, setRepo] = useState<Repository | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
         fetchRepository()
+        checkAuth()
     }, [id])
+
+    const checkAuth = async () => {
+        const user = await getCurrentUser()
+        setIsAuthenticated(!!user)
+    }
 
     const fetchRepository = async () => {
         try {
@@ -270,32 +279,7 @@ export default function RepositoryDetailPage({
 
                     {/* Sidebar - Right Side */}
                     <div className="space-y-6">
-                        {/* Join Squad CTA */}
-                        <Card glass className="p-6">
-                            <h3 className="text-xl font-semibold mb-4">Revival Squad</h3>
-                            <p className="text-gray-400 text-sm mb-6">
-                                Join the team working to revive this project. Collaborate, assign roles, and make an impact!
-                            </p>
-                            <Button className="w-full mb-4" size="lg">
-                                Join Revival Squad
-                            </Button>
-                            <div className="text-center text-sm text-gray-400">
-                                {repo.interest_count} developers interested
-                            </div>
-                        </Card>
-
-                        {/* Squad Members (Mock) */}
-                        <Card glass className="p-6">
-                            <h3 className="text-lg font-semibold mb-4">Squad Members</h3>
-                            <p className="text-sm text-gray-400 mb-4">
-                                No one has joined yet. Be the first!
-                            </p>
-                            <div className="text-xs text-gray-500">
-                                Sign in to see who's interested
-                            </div>
-                        </Card>
-
-                        {/* Activity (Mock) */}
+                        {/* Activity */}
                         <Card glass className="p-6">
                             <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
                             <div className="space-y-3 text-sm">
@@ -309,6 +293,11 @@ export default function RepositoryDetailPage({
                             </div>
                         </Card>
                     </div>
+                </div>
+
+                {/* Squads Section - Full Width */}
+                <div className="mt-12">
+                    <SquadList repoId={id} isAuthenticated={isAuthenticated} />
                 </div>
             </div>
         </div>

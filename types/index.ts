@@ -81,20 +81,30 @@ export interface RepositoryMetrics {
 export interface Squad {
     id: string
     repo_id: string
+    name: string
+    description: string | null
+    created_by: string
     created_at: string
+    updated_at: string
     member_count: number
+    is_active: boolean
 }
 
 export interface SquadMember {
     id: string
     squad_id: string
     user_id: string
-    role: SquadRole
-    is_lead: boolean
+    role: 'creator' | 'member' | 'moderator'
     joined_at: string
 
     // Relations
     user?: User
+}
+
+export interface SquadWithMembership extends Squad {
+    is_user_member: boolean
+    user_role?: 'creator' | 'member' | 'moderator'
+    members?: SquadMember[]
 }
 
 export interface ActivityFeed {
