@@ -1,67 +1,76 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 @layer base {
   :root {
     /* Forest Green Theme - Light Mode (Default) */
-    --background: 100 20% 96%; /* Cream/Mint Tint */
-    --foreground: 145 30% 20%; /* Dark Forest Text */
-    
+    --background: 100 20% 96%;
+    /* Cream/Mint Tint */
+    --foreground: 145 30% 20%;
+    /* Dark Forest Text */
+
     --card: 0 0% 100%;
     --card-foreground: 145 30% 20%;
-    
+
     --popover: 0 0% 100%;
     --popover-foreground: 145 30% 20%;
-    
-    --primary: 145 25% 25%; /* #2F4839 Deep Forest */
-    --primary-foreground: 135 100% 98%; /* Minty White */
-    
-    --secondary: 120 20% 90%; /* Light Green Gray */
+
+    --primary: 145 25% 25%;
+    /* #2F4839 Deep Forest */
+    --primary-foreground: 135 100% 98%;
+    /* Minty White */
+
+    --secondary: 120 20% 90%;
+    /* Light Green Gray */
     --secondary-foreground: 145 30% 20%;
-    
+
     --muted: 100 10% 90%;
     --muted-foreground: 145 15% 45%;
-    
-    --accent: 130 100% 80%; /* #98FF98 Mint */
+
+    --accent: 130 100% 80%;
+    /* #98FF98 Mint */
     --accent-foreground: 145 40% 15%;
-    
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 145 20% 85%;
     --input: 145 20% 85%;
     --ring: 145 25% 25%;
-    
-    --radius: 1.5rem; /* Larger organic radius */
+
+    --radius: 1.5rem;
+    /* Larger organic radius */
   }
 
   /* Dark mode - Dark Forest */
   .dark {
-    --background: 155 35% 10%; /* Very dark green/black */
+    --background: 155 35% 10%;
+    /* Very dark green/black */
     --foreground: 135 20% 90%;
-    
+
     --card: 155 30% 13%;
     --card-foreground: 135 20% 90%;
-    
+
     --popover: 155 30% 13%;
     --popover-foreground: 135 20% 90%;
-    
-    --primary: 135 60% 50%; /* Brighter Green */
+
+    --primary: 135 60% 50%;
+    /* Brighter Green */
     --primary-foreground: 155 40% 10%;
-    
+
     --secondary: 155 25% 18%;
     --secondary-foreground: 135 20% 90%;
-    
+
     --muted: 155 25% 18%;
     --muted-foreground: 135 15% 65%;
-    
-    --accent: 130 80% 70%; /* Muted Neon Mint */
+
+    --accent: 130 80% 70%;
+    /* Muted Neon Mint */
     --accent-foreground: 155 40% 10%;
-    
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    
+
     --border: 155 25% 18%;
     --input: 155 25% 18%;
     --ring: 130 80% 70%;
@@ -72,6 +81,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -81,7 +91,7 @@
   .organic-card {
     @apply bg-card rounded-2xl border border-border/50 shadow-organic transition-all duration-300;
   }
-  
+
   .organic-card:hover {
     @apply shadow-organic-hover -translate-y-1;
   }
@@ -93,8 +103,8 @@
   .btn-organic-secondary {
     @apply bg-white text-forest-700 border-2 border-forest-100 rounded-full px-8 py-3 font-medium transition-all duration-300 hover:bg-forest-50 hover:border-forest-200;
   }
-  
+
   .text-glow {
-      text-shadow: 0 0 20px rgba(152, 255, 152, 0.4);
+    text-shadow: 0 0 20px rgba(152, 255, 152, 0.4);
   }
 }

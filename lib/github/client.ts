@@ -35,32 +35,56 @@ export async function fetchGitHubRepo(fullName: string) {
             repo,
         })
 
-        return {
-            success: true,
-            data: {
-                github_repo_id: data.id,
-                full_name: data.full_name,
-                name: data.name,
-                description: data.description,
-                language: data.language,
-                stars_count: data.stargazers_count,
-                forks_count: data.forks_count,
-                watchers_count: data.watchers_count,
-                open_issues_count: data.open_issues_count,
-                size_kb: data.size,
-                default_branch: data.default_branch,
-                homepage_url: data.homepage,
-                topics: data.topics || [],
-                license_name: data.license?.name,
-                created_at_github: data.created_at,
-                last_push_at: data.pushed_at,
-            },
-        }
+        return formatRepoResponse(data)
     } catch (error: any) {
+        // If authentication failed (Bad credentials), try again without auth
+        if (error.status === 401) {
+            console.warn('GitHub auth failed, retrying without auth...')
+            try {
+                const noAuthClient = new Octokit({
+                    userAgent: 'project-phoenix-reviver/1.0.0',
+                })
+                const { data } = await noAuthClient.rest.repos.get({
+                    owner,
+                    repo,
+                })
+                return formatRepoResponse(data)
+            } catch (retryError: any) {
+                return {
+                    success: false,
+                    error: retryError.message || 'Failed to fetch repository (retry failed)',
+                }
+            }
+        }
+
         return {
             success: false,
             error: error.message || 'Failed to fetch repository',
         }
+    }
+}
+
+function formatRepoResponse(data: any) {
+    return {
+        success: true,
+        data: {
+            github_repo_id: data.id,
+            full_name: data.full_name,
+            name: data.name,
+            description: data.description,
+            language: data.language,
+            stars_count: data.stargazers_count,
+            forks_count: data.forks_count,
+            watchers_count: data.watchers_count,
+            open_issues_count: data.open_issues_count,
+            size_kb: data.size,
+            default_branch: data.default_branch,
+            homepage_url: data.homepage,
+            topics: data.topics || [],
+            license_name: data.license?.name,
+            created_at_github: data.created_at,
+            last_push_at: data.pushed_at,
+        },
     }
 }
 

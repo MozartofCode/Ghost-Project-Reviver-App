@@ -1,9 +1,78 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Github, Sprout, Users, Zap, ArrowRight, Code2, Heart, TrendingUp, Leaf, Recycle, Sun } from 'lucide-react'
+import { Github, Sprout, Users, Zap, ArrowRight, Code2, Heart, TrendingUp, Leaf, Recycle, Sun, Loader2 } from 'lucide-react'
+import type { Repository } from '@/types'
 
 export default function Home() {
+  const [featuredRepos, setFeaturedRepos] = useState<Repository[]>([])
+  const [stats, setStats] = useState({
+    totalRepos: 0,
+    totalUsers: 0,
+    activeRevivals: 0
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      // Fetch featured repositories (top 3 by interest)
+      const reposResponse = await fetch('/api/repositories')
+      const reposData = await reposResponse.json()
+
+      if (reposData.repositories) {
+        // Get top 3 repositories by interest or stars
+        const featured = reposData.repositories
+          .sort((a: Repository, b: Repository) => (b.interest_count || 0) - (a.interest_count || 0))
+          .slice(0, 3)
+
+        setFeaturedRepos(featured)
+
+        // Calculate stats
+        setStats({
+          totalRepos: reposData.repositories.length,
+          totalUsers: 450, // TODO: Fetch from users table
+          activeRevivals: reposData.repositories.filter((r: Repository) => r.abandonment_status === 'reviving').length
+        })
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'abandoned':
+        return 'bg-red-100 text-red-600'
+      case 'at-risk':
+        return 'bg-orange-100 text-orange-600'
+      case 'reviving':
+        return 'bg-forest-100 text-forest-600'
+      default:
+        return 'bg-gray-100 text-gray-600'
+    }
+  }
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'abandoned':
+        return 'Withered'
+      case 'at-risk':
+        return 'Needs Water'
+      case 'reviving':
+        return 'Sprouting'
+      default:
+        return status
+    }
+  }
   return (
     <div className="min-h-screen bg-cream font-sans">
       {/* Navigation - Floating Organic Bar */}
@@ -68,15 +137,15 @@ export default function Home() {
           {/* Hero Stats */}
           <div className="flex justify-center gap-12 mt-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <div className="text-center">
-              <p className="text-3xl font-bold text-forest-800">1.2k+</p>
+              <p className="text-3xl font-bold text-forest-800">{stats.totalRepos}+</p>
               <p className="text-forest-500 text-sm">Seeds Planted</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-forest-800">450+</p>
+              <p className="text-3xl font-bold text-forest-800">{stats.totalUsers}+</p>
               <p className="text-forest-500 text-sm">Gardeners</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-forest-800">89</p>
+              <p className="text-3xl font-bold text-forest-800">{stats.activeRevivals}</p>
               <p className="text-forest-500 text-sm">Full Revivals</p>
             </div>
           </div>
@@ -92,92 +161,63 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Demo Card 1 */}
-            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 bg-mint-100 rounded-2xl group-hover:bg-mint-200 transition-colors">
-                    <Code2 className="w-6 h-6 text-forest-700" />
-                  </div>
-                  <span className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold">Withered</span>
-                </div>
-                <CardTitle className="text-2xl text-forest-800">React-D3-Glow</CardTitle>
-                <CardDescription className="text-forest-400">Abandoned 2 years ago</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-forest-600 mb-6 line-clamp-2">
-                  A library for creating glowing D3 charts in React. Needs updating for React 18 concurrency mode.
-                </p>
-                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
-                  <div className="bg-forest-500 h-2 rounded-full" style={{ width: '45%' }}></div>
-                </div>
-                <div className="flex justify-between text-xs text-forest-500 mb-6">
-                  <span>Revival Progress</span>
-                  <span>45%</span>
-                </div>
-                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
-                  View Details
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Demo Card 2 */}
-            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 bg-blue-100 rounded-2xl group-hover:bg-blue-200 transition-colors">
-                    <Zap className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">Needs Water</span>
-                </div>
-                <CardTitle className="text-2xl text-forest-800">Node-Redis-Cache</CardTitle>
-                <CardDescription className="text-forest-400">Abandoned 8 months ago</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-forest-600 mb-6 line-clamp-2">
-                  High-performance Redis cache wrapper. Maintainer stepped down. Critical security vulnerabilities found.
-                </p>
-                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
-                  <div className="bg-mint-dark h-2 rounded-full" style={{ width: '12%' }}></div>
-                </div>
-                <div className="flex justify-between text-xs text-forest-500 mb-6">
-                  <span>Revival Progress</span>
-                  <span>12%</span>
-                </div>
-                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
-                  View Details
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Demo Card 3 */}
-            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-200 transition-colors">
-                    <Users className="w-6 h-6 text-purple-700" />
-                  </div>
-                  <span className="px-3 py-1 bg-forest-100 text-forest-600 rounded-full text-xs font-bold">Sprouting</span>
-                </div>
-                <CardTitle className="text-2xl text-forest-800">Auth-0-Connect</CardTitle>
-                <CardDescription className="text-forest-400">Active Revival Squad</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-forest-600 mb-6 line-clamp-2">
-                  Simplifying Auth0 connections for mobile apps. Revival squad formed, needing documentation help.
-                </p>
-                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
-                  <div className="bg-mint-500 h-2 rounded-full" style={{ width: '78%' }}></div>
-                </div>
-                <div className="flex justify-between text-xs text-forest-500 mb-6">
-                  <span>Revival Progress</span>
-                  <span>78%</span>
-                </div>
-                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
-                  View Details
-                </Button>
-              </CardContent>
-            </Card>
+            {loading ? (
+              <div className="col-span-full flex items-center justify-center py-12">
+                <Loader2 className="w-12 h-12 animate-spin text-forest-700" />
+              </div>
+            ) : featuredRepos.length > 0 ? (
+              featuredRepos.map((repo) => (
+                <Card key={repo.id} className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-mint-100 rounded-2xl group-hover:bg-mint-200 transition-colors">
+                        <Code2 className="w-6 h-6 text-forest-700" />
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(repo.abandonment_status)}`}>
+                        {getStatusLabel(repo.abandonment_status)}
+                      </span>
+                    </div>
+                    <CardTitle className="text-2xl text-forest-800">{repo.name}</CardTitle>
+                    <CardDescription className="text-forest-400">
+                      {repo.last_commit_at ? `Last commit ${new Date(repo.last_commit_at).toLocaleDateString()}` : 'Recently added'}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-forest-600 mb-6 line-clamp-2">
+                      {repo.description || 'No description available'}
+                    </p>
+                    {repo.maintenance_score !== null && (
+                      <>
+                        <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
+                          <div
+                            className="bg-forest-500 h-2 rounded-full"
+                            style={{ width: `${repo.maintenance_score}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-xs text-forest-500 mb-6">
+                          <span>Maintenance Score</span>
+                          <span>{repo.maintenance_score}%</span>
+                        </div>
+                      </>
+                    )}
+                    <Link href={`/repositories/${repo.id}`}>
+                      <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
+                        View Details
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-forest-600 mb-4">No repositories yet. Be the first to import one!</p>
+                <Link href="/explore">
+                  <Button className="rounded-full bg-forest-700 hover:bg-forest-800 text-white px-6">
+                    Import Repository
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="text-center mt-12">

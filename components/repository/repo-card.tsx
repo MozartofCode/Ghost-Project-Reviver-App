@@ -13,16 +13,16 @@ interface RepoCardProps {
 export function RepoCard({ repo }: RepoCardProps) {
     return (
         <Link href={`/repositories/${repo.id}`}>
-            <Card glass className="p-6 h-full flex flex-col">
+            <Card className="p-6 h-full flex flex-col bg-black/40 backdrop-blur-md border border-white/10 hover:border-phoenix-primary/50 hover:bg-black/60 hover:scale-[1.02] transition-all duration-300 group shadow-lg">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white mb-1 hover:text-phoenix-primary transition">
+                    <div className="flex-1 min-w-0 pr-4">
+                        <h3 className="text-xl font-bold text-white mb-1 truncate group-hover:text-phoenix-primary transition-colors">
                             {repo.name}
                         </h3>
-                        <p className="text-sm text-gray-400">{repo.full_name}</p>
+                        <p className="text-sm text-gray-400 truncate">{repo.full_name}</p>
                     </div>
-                    <Badge variant="status" status={repo.abandonment_status}>
+                    <Badge variant="status" status={repo.abandonment_status} className="shrink-0 shadow-sm">
                         {repo.abandonment_status === 'abandoned' && '💀'}
                         {repo.abandonment_status === 'at-risk' && '⚠️'}
                         {repo.abandonment_status === 'reviving' && '🔥'}
@@ -33,31 +33,31 @@ export function RepoCard({ repo }: RepoCardProps) {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-gray-300 mb-4 flex-1 line-clamp-2">
+                <p className="text-gray-300 mb-6 flex-1 line-clamp-2 leading-relaxed">
                     {repo.description || 'No description available'}
                 </p>
 
-                {/* Maintenance Score */}
+                {/* Maintenance Score - Simplified */}
                 {repo.maintenance_score && (
-                    <div className="mb-4">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs text-gray-400">Maintenance Score</span>
+                    <div className="mb-6">
+                        <div className="flex items-center justify-between mb-2 text-xs font-medium uppercase tracking-wider text-gray-500">
+                            <span>Maintenance Score</span>
                             <span className={cn(
-                                "text-sm font-semibold",
-                                repo.maintenance_score >= 70 ? "text-green-500" :
-                                    repo.maintenance_score >= 40 ? "text-amber-500" :
-                                        "text-red-500"
+                                "",
+                                repo.maintenance_score >= 70 ? "text-green-400" :
+                                    repo.maintenance_score >= 40 ? "text-amber-400" :
+                                        "text-red-400"
                             )}>
                                 {repo.maintenance_score}/100
                             </span>
                         </div>
-                        <div className="w-full bg-white/5 rounded-full h-2">
+                        <div className="w-full bg-black/50 rounded-full h-2 overflow-hidden border border-white/5">
                             <div
                                 className={cn(
-                                    "h-2 rounded-full transition-all",
-                                    repo.maintenance_score >= 70 ? "bg-green-500" :
-                                        repo.maintenance_score >= 40 ? "bg-amber-500" :
-                                            "bg-red-500"
+                                    "h-full rounded-full transition-all shadow-[0_0_10px_rgba(0,0,0,0.5)]",
+                                    repo.maintenance_score >= 70 ? "bg-gradient-to-r from-green-600 to-green-400" :
+                                        repo.maintenance_score >= 40 ? "bg-gradient-to-r from-amber-600 to-amber-400" :
+                                            "bg-gradient-to-r from-red-600 to-red-400"
                                 )}
                                 style={{ width: `${repo.maintenance_score}%` }}
                             />
@@ -66,50 +66,29 @@ export function RepoCard({ repo }: RepoCardProps) {
                 )}
 
                 {/* Stats */}
-                <div className="flex flex-wrap gap-4 mb-4 text-sm text-gray-400">
-                    <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4" />
-                        <span>{formatNumber(repo.stars_count)}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <GitFork className="w-4 h-4" />
-                        <span>{formatNumber(repo.forks_count)}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
-                        <span>{repo.open_issues_count}</span>
-                    </div>
-                    {repo.interest_count > 0 && (
-                        <div className="flex items-center gap-1">
-                            <Users className="w-4 h-4" />
-                            <span>{repo.interest_count}</span>
+                <div className="flex items-center justify-between text-sm text-gray-400 border-t border-white/5 pt-4 mt-auto">
+                    <div className="flex gap-4">
+                        <div className="flex items-center gap-1.5 hover:text-white transition-colors" title="Stars">
+                            <Star className="w-4 h-4 text-yellow-500" />
+                            <span className="font-medium">{formatNumber(repo.stars_count)}</span>
                         </div>
-                    )}
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                    <div className="flex items-center gap-2">
-                        {repo.language && (
-                            <div className="flex items-center gap-2">
-                                <div className={cn(
-                                    "w-3 h-3 rounded-full",
-                                    repo.language === 'JavaScript' && "bg-yellow-400",
-                                    repo.language === 'TypeScript' && "bg-blue-500",
-                                    repo.language === 'Python' && "bg-green-500",
-                                    repo.language === 'Go' && "bg-cyan-500",
-                                    repo.language !== 'JavaScript' && repo.language !== 'TypeScript' &&
-                                    repo.language !== 'Python' && repo.language !== 'Go' && "bg-gray-500"
-                                )} />
-                                <span className="text-sm text-gray-400">{repo.language}</span>
-                            </div>
-                        )}
+                        <div className="flex items-center gap-1.5 hover:text-white transition-colors" title="Forks">
+                            <GitFork className="w-4 h-4" />
+                            <span className="font-medium">{formatNumber(repo.forks_count)}</span>
+                        </div>
                     </div>
 
-                    {repo.last_commit_at && (
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
-                            <Clock className="w-3 h-3" />
-                            <span>{getRelativeTime(repo.last_commit_at)}</span>
+                    {repo.language && (
+                        <div className="flex items-center gap-2">
+                            <div className={cn(
+                                "w-2.5 h-2.5 rounded-full shadow-[0_0_8px_currentColor]",
+                                repo.language === 'JavaScript' && "bg-yellow-400 text-yellow-400",
+                                repo.language === 'TypeScript' && "bg-blue-500 text-blue-500",
+                                repo.language === 'Python' && "bg-green-500 text-green-500",
+                                repo.language === 'Go' && "bg-cyan-500 text-cyan-500",
+                                !['JavaScript', 'TypeScript', 'Python', 'Go'].includes(repo.language) && "bg-gray-400 text-gray-400"
+                            )} />
+                            <span className="text-xs text-gray-300 font-medium">{repo.language}</span>
                         </div>
                     )}
                 </div>
