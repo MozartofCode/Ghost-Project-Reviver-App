@@ -1,268 +1,320 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Github, Sparkles, Users, Zap, ArrowRight, Code2, Heart, TrendingUp } from 'lucide-react'
+import { Github, Sprout, Users, Zap, ArrowRight, Code2, Heart, TrendingUp, Leaf, Recycle, Sun } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-phoenix-dark">
-      {/* Navigation */}
-      <nav className="border-b border-white/10 backdrop-blur-lg bg-phoenix-dark/80 fixed w-full z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-8 h-8 text-phoenix-accent" />
-              <span className="text-xl font-bold gradient-text">Project Phoenix</span>
+    <div className="min-h-screen bg-cream font-sans">
+      {/* Navigation - Floating Organic Bar */}
+      <nav className="fixed w-full z-50 pt-6 px-4">
+        <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-md rounded-full shadow-organic border border-forest-100 px-6 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="bg-forest-100 p-2 rounded-full">
+              <Leaf className="w-5 h-5 text-forest-600 fill-forest-600" />
             </div>
-            <div className="flex items-center gap-4">
-              <Link href="/explore">
-                <Button variant="ghost" size="sm">Explore</Button>
-              </Link>
-              <Link href="/auth/login">
-                <Button variant="primary" size="sm" className="gap-2">
-                  <Github className="w-4 h-4" />
-                  Sign in with GitHub
-                </Button>
-              </Link>
-            </div>
+            <span className="text-xl font-bold text-forest-800 tracking-tight">Project Phoenix</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-forest-600 font-medium">
+            <Link href="/explore" className="hover:text-forest-800 transition-colors">Explore</Link>
+            <Link href="#" className="hover:text-forest-800 transition-colors">Community</Link>
+            <Link href="#" className="hover:text-forest-800 transition-colors">Resources</Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href="/auth/login">
+              <Button className="rounded-full bg-forest-700 hover:bg-forest-800 text-white px-6">
+                Sign In
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-block mb-4">
-            <span className="px-4 py-2 rounded-full bg-phoenix-accent/10 text-phoenix-accent border border-phoenix-accent/20 text-sm font-medium">
-              🔥 Revive the code that matters
-            </span>
+      <section className="pt-40 pb-24 px-4 overflow-hidden relative">
+        {/* Abstract Background Elements */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-mint-light/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 -z-10"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-forest-100/40 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 -z-10"></div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint-100 text-forest-700 border border-mint-200 mb-8 animate-fade-in">
+            <Sprout className="w-4 h-4" />
+            <span className="text-sm font-semibold">The season of revival is here</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Give <span className="gradient-text">Abandoned Projects</span>
-            <br />
-            A Second Life
+          <h1 className="text-6xl md:text-7xl font-bold text-forest-900 mb-8 leading-[1.1] animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Revive. Restore. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-forest-600 to-mint-dark">Contribute.</span>
           </h1>
 
-          <p className="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
-            Discover valuable open-source repositories that need a new maintainer.
-            Form revival squads, collaborate with developers, and bring ghost projects back to life.
+          <p className="text-xl text-forest-600 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Don't let good code wither away. Join our community of developers dedicated to nurturing abandoned projects back to health.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/auth/login">
-              <Button size="lg" className="gap-2 group">
-                Get Started
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <Link href="/explore">
-              <Button variant="secondary" size="lg">
-                Browse Repositories
+              <Button size="lg" className="rounded-full h-14 px-8 bg-forest-700 hover:bg-forest-800 text-white text-lg gap-2 shadow-lg shadow-forest-700/20 hover:shadow-xl hover:scale-105 transition-all">
+                Explore The Garden
+                <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto">
-            <div className="text-center">
-              <p className="text-4xl font-bold text-phoenix-primary">1,000+</p>
-              <p className="text-gray-400 mt-2">Repositories Cataloged</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-phoenix-accent">500+</p>
-              <p className="text-gray-400 mt-2">Active Developers</p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold text-green-500">50+</p>
-              <p className="text-gray-400 mt-2">Projects Revived</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 px-4 bg-gradient-to-b from-transparent to-phoenix-darker/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-xl text-gray-400">Three simple steps to revive a project</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card glass>
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-phoenix-primary/20 flex items-center justify-center mb-4">
-                  <Code2 className="w-6 h-6 text-phoenix-primary" />
-                </div>
-                <CardTitle>1. Discover</CardTitle>
-                <CardDescription>
-                  Browse abandoned repositories scored by maintenance difficulty.
-                  Filter by language, stars, and reviv ability score.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card glass>
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-phoenix-accent/20 flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-phoenix-accent" />
-                </div>
-                <CardTitle>2. Form a Squad</CardTitle>
-                <CardDescription>
-                  Join or create a revival squad. Collaborate with other developers,
-                  assign roles, and coordinate the revival effort.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card glass>
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
-                  <Zap className="w-6 h-6 text-green-500" />
-                </div>
-                <CardTitle>3. Revive</CardTitle>
-                <CardDescription>
-                  Fork the project, fix issues, update dependencies, and bring it back to life.
-                  Build your portfolio while helping the open-source community.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Why Project Phoenix?</h2>
-            <p className="text-xl text-gray-400">Built for developers who want to make an impact</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <Card key={index} glass hover className="p-6">
-                <feature.icon className="w-8 h-8 text-phoenix-primary mb-4" />
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-gray-400">{feature.description}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <Card glass className="p-12 text-center">
-            <div className="mb-6">
-              <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
-              <h2 className="text-4xl font-bold mb-4">Ready to Revive a Project?</h2>
-              <p className="text-xl text-gray-400 mb-8">
-                Join hundreds of developers breathing new life into abandoned open-source projects
-              </p>
-            </div>
             <Link href="/auth/login">
-              <Button size="lg" className="gap-2">
-                <Github className="w-5 h-5" />
-                Start with GitHub
+              <Button variant="outline" size="lg" className="rounded-full h-14 px-8 border-2 border-forest-100 text-forest-700 hover:bg-forest-50 hover:border-forest-200 text-lg">
+                Join Movement
               </Button>
             </Link>
-          </Card>
+          </div>
+
+          {/* Hero Stats */}
+          <div className="flex justify-center gap-12 mt-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-forest-800">1.2k+</p>
+              <p className="text-forest-500 text-sm">Seeds Planted</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-forest-800">450+</p>
+              <p className="text-forest-500 text-sm">Gardeners</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-forest-800">89</p>
+              <p className="text-forest-500 text-sm">Full Revivals</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Discover Section / Card Showcase */}
+      <section className="py-24 px-4 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-forest-900 mb-4">Featured Projects</h2>
+            <p className="text-forest-500 text-lg">Withered projects waiting for your care</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Demo Card 1 */}
+            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-3 bg-mint-100 rounded-2xl group-hover:bg-mint-200 transition-colors">
+                    <Code2 className="w-6 h-6 text-forest-700" />
+                  </div>
+                  <span className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold">Withered</span>
+                </div>
+                <CardTitle className="text-2xl text-forest-800">React-D3-Glow</CardTitle>
+                <CardDescription className="text-forest-400">Abandoned 2 years ago</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-forest-600 mb-6 line-clamp-2">
+                  A library for creating glowing D3 charts in React. Needs updating for React 18 concurrency mode.
+                </p>
+                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
+                  <div className="bg-forest-500 h-2 rounded-full" style={{ width: '45%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-forest-500 mb-6">
+                  <span>Revival Progress</span>
+                  <span>45%</span>
+                </div>
+                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Demo Card 2 */}
+            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-3 bg-blue-100 rounded-2xl group-hover:bg-blue-200 transition-colors">
+                    <Zap className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">Needs Water</span>
+                </div>
+                <CardTitle className="text-2xl text-forest-800">Node-Redis-Cache</CardTitle>
+                <CardDescription className="text-forest-400">Abandoned 8 months ago</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-forest-600 mb-6 line-clamp-2">
+                  High-performance Redis cache wrapper. Maintainer stepped down. Critical security vulnerabilities found.
+                </p>
+                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
+                  <div className="bg-mint-dark h-2 rounded-full" style={{ width: '12%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-forest-500 mb-6">
+                  <span>Revival Progress</span>
+                  <span>12%</span>
+                </div>
+                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Demo Card 3 */}
+            <Card className="organic-card border-none bg-white shadow-organic hover:shadow-organic-hover group">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-200 transition-colors">
+                    <Users className="w-6 h-6 text-purple-700" />
+                  </div>
+                  <span className="px-3 py-1 bg-forest-100 text-forest-600 rounded-full text-xs font-bold">Sprouting</span>
+                </div>
+                <CardTitle className="text-2xl text-forest-800">Auth-0-Connect</CardTitle>
+                <CardDescription className="text-forest-400">Active Revival Squad</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-forest-600 mb-6 line-clamp-2">
+                  Simplifying Auth0 connections for mobile apps. Revival squad formed, needing documentation help.
+                </p>
+                <div className="w-full bg-forest-100 rounded-full h-2 mb-2">
+                  <div className="bg-mint-500 h-2 rounded-full" style={{ width: '78%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-forest-500 mb-6">
+                  <span>Revival Progress</span>
+                  <span>78%</span>
+                </div>
+                <Button className="w-full rounded-xl bg-forest-50 text-forest-700 hover:bg-forest-100 border border-forest-100 font-semibold h-12">
+                  View Details
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/explore">
+              <Button variant="link" className="text-forest-600 text-lg hover:text-forest-800">
+                Explore all projects <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Ecosystem Section */}
+      <section className="py-24 px-4 bg-forest-900 text-cream relative overflow-hidden">
+        {/* Decorative foliage */}
+        <div className="absolute top-0 left-0 text-forest-800 opacity-20 transform -translate-x-1/4 -translate-y-1/4">
+          <Leaf className="w-96 h-96" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-forest-800 text-mint mb-8">
+                <Sun className="w-4 h-4" />
+                <span className="text-sm font-semibold">Our Methodology</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">How We Cultivate Success</h2>
+              <p className="text-forest-200 text-lg mb-8 leading-relaxed">
+                Software doesn't have to die. Like a garden, it just needs the right conditions to thrive again. Our platform connects "withered" repos with eager new "gardeners."
+              </p>
+
+              <ul className="space-y-6">
+                <li className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-forest-800 flex items-center justify-center shrink-0">
+                    <TrendingUp className="w-6 h-6 text-mint" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-1">Assess Health</h3>
+                    <p className="text-forest-300">Our AI analyzes repo activity to calculate a "Revival Score", identifying the most viable candidates.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-forest-800 flex items-center justify-center shrink-0">
+                    <Users className="w-6 h-6 text-mint" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-1">Form Revival Squads</h3>
+                    <p className="text-forest-300">Don't work alone. Join a team of designers, developers, and writers to share the load.</p>
+                  </div>
+                </li>
+                <li className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-forest-800 flex items-center justify-center shrink-0">
+                    <Recycle className="w-6 h-6 text-mint" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-1">Sustain Growth</h3>
+                    <p className="text-forest-300">Once active, we help transition the project to long-term governance models.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="relative">
+              <Card className="bg-forest-800 border-none p-8 rounded-3xl shadow-2xl relative z-10 rotate-3">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-white/10"></div>
+                  <div>
+                    <div className="h-4 w-32 bg-white/10 rounded mb-2"></div>
+                    <div className="h-3 w-20 bg-white/10 rounded"></div>
+                  </div>
+                </div>
+                <div className="space-y-3 mb-8">
+                  <div className="h-3 w-full bg-white/5 rounded"></div>
+                  <div className="h-3 w-full bg-white/5 rounded"></div>
+                  <div className="h-3 w-2/3 bg-white/5 rounded"></div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="h-10 w-24 bg-mint text-forest-900 rounded-xl flex items-center justify-center font-bold text-sm">Adopt</div>
+                  <div className="h-10 w-24 border border-white/20 rounded-xl"></div>
+                </div>
+              </Card>
+              <div className="absolute top-0 left-0 w-full h-full bg-mint opacity-20 rounded-3xl -rotate-3 transform -translate-x-4 -translate-y-4"></div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-phoenix-accent" />
-                <span className="font-bold gradient-text">Project Phoenix</span>
-              </div>
-              <p className="text-sm text-gray-400">
-                Reviving abandoned open-source projects, one repository at a time.
-              </p>
+      <footer className="bg-forest-950 pt-20 pb-10 px-4 text-forest-300">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="col-span-1 md:col-span-2">
+            <div className="flex items-center gap-2 mb-6">
+              <Leaf className="w-6 h-6 text-mint" />
+              <span className="text-2xl font-bold text-white">Project Phoenix</span>
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Platform</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/explore" className="hover:text-white transition">Explore</Link></li>
-                <li><Link href="#" className="hover:text-white transition">How it Works</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Pricing</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="#" className="hover:text-white transition">Documentation</Link></li>
-                <li><Link href="#" className="hover:text-white transition">API</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Blog</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="#" className="hover:text-white transition">Privacy</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Terms</Link></li>
-                <li><Link href="#" className="hover:text-white transition">License</Link></li>
-              </ul>
+            <p className="max-w-md text-forest-400 mb-8">
+              Cultivating the open, digital commons. We believe every line of code deserves a chance to grow.
+            </p>
+            <div className="flex gap-4">
+              <Button variant="ghost" size="icon" className="text-forest-400 hover:text-white hover:bg-forest-900 rounded-full">
+                <Github className="w-5 h-5" />
+              </Button>
+              <Button variant="ghost" size="icon" className="text-forest-400 hover:text-white hover:bg-forest-900 rounded-full">
+                <Users className="w-5 h-5" />
+              </Button>
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm text-gray-400">
-            <p>© 2026 Project Phoenix. Built with ❤️ for the open-source community.</p>
+          <div>
+            <h4 className="text-white font-bold mb-6">Platform</h4>
+            <ul className="space-y-4">
+              <li><Link href="#" className="hover:text-mint transition-colors">Browse Projects</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Revival Squads</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Success Stories</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Pricing for Orgs</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-bold mb-6">Community</h4>
+            <ul className="space-y-4">
+              <li><Link href="#" className="hover:text-mint transition-colors">Contribution Guide</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Code of Conduct</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Events & Hackathons</Link></li>
+              <li><Link href="#" className="hover:text-mint transition-colors">Discord Server</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto border-t border-forest-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm">© 2026 Project Phoenix. All rights reserved.</p>
+          <div className="flex gap-6 text-sm">
+            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
           </div>
         </div>
       </footer>
     </div>
   )
 }
-
-const features = [
-  {
-    icon: TrendingUp,
-    title: "Smart Discovery",
-    description: "AI-powered algorithm finds abandoned projects worth reviving"
-  },
-  {
-    icon: Code2,
-    title: "Maintenance Scores",
-    description: "Know what you're getting into with detailed difficulty metrics"
-  },
-  {
-    icon: Users,
-    title: "Team Collaboration",
-    description: "Form squads and tackle projects together with clear roles"
-  },
-  {
-    icon: Github,
-    title: "GitHub Integration",
-    description: "Seamless sync with GitHub for authentication and repo data"
-  },
-  {
-    icon: Sparkles,
-    title: "Build Your Portfolio",
-    description: "Get credit for real-world project maintenance experience"
-  },
-  {
-    icon: Heart,
-    title: "Give Back",
-    description: "Help the open-source community by reviving valuable projects"
-  },
-  {
-    icon: Zap,
-    title: "Quick Start",
-    description: "Get started in minutes with our guided onboarding process"
-  },
-  {
-    icon: TrendingUp,
-    title: "Track Progress",
-    description: "Monitor revival progress and celebrate milestones together"
-  }
-]

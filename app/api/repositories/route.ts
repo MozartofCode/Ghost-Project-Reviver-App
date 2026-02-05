@@ -1,6 +1,5 @@
-import { createServerClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
@@ -8,8 +7,7 @@ export async function GET(request: Request) {
     const status = searchParams.get('status')
     const query = searchParams.get('query')
 
-    const cookieStore = cookies()
-    const supabase = createServerClient(cookieStore)
+    const supabase = await createClient()
 
     let dbQuery = supabase
         .from('repositories')

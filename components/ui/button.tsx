@@ -2,25 +2,30 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
-    size?: 'sm' | 'md' | 'lg'
+    variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'link'
+    size?: 'sm' | 'md' | 'lg' | 'icon'
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant = 'primary', size = 'md', children, ...props }, ref) => {
-        const baseStyles = "inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        const baseStyles = "inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 
+        // Updated to use the new functional CSS variables from globals.css where possible, 
+        // or the specific tailwind colors if strict adherence to the new theme is needed.
         const variants = {
-            primary: "bg-phoenix-primary hover:bg-phoenix-primary-light text-white shadow-lg shadow-phoenix-primary/20 hover:shadow-phoenix-primary/40 hover:-translate-y-0.5",
-            secondary: "bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20",
-            ghost: "bg-transparent hover:bg-white/5 text-white",
-            danger: "bg-red-600 hover:bg-red-700 text-white",
+            primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-md",
+            secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+            ghost: "hover:bg-accent hover:text-accent-foreground",
+            danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+            outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+            link: "text-primary underline-offset-4 hover:underline",
         }
 
         const sizes = {
-            sm: "px-4 py-2 text-sm",
-            md: "px-6 py-3 text-base",
-            lg: "px-8 py-4 text-lg",
+            sm: "h-9 rounded-md px-3 text-sm",
+            md: "h-10 px-4 py-2",
+            lg: "h-11 rounded-md px-8 text-lg",
+            icon: "h-10 w-10",
         }
 
         return (

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google"; // Changed to Outfit
 import "./globals.css";
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -25,8 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased`}>
+    // Default to light mode for the 'Overgrown' theme usually, but respecting system pref is good.
+    // However, the user asked for a specific look. Let's make sure 'light' class is available or just let system decide.
+    // Given the prompt "Cream/Forest" look, it works best in Light mode. 
+    // I will remove 'dark' class from html to default to light, but allow proper switching if needed later.
+    <html lang="en">
+      <body className={`${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

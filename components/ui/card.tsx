@@ -7,13 +7,13 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-    ({ className, glass = false, hover = true, ...props }, ref) => {
+    ({ className, glass = false, hover = false, ...props }, ref) => {
         const baseStyles = glass
             ? "glass-card"
-            : "bg-phoenix-darker border border-white/10 rounded-lg"
+            : "bg-card text-card-foreground rounded-xl border shadow-sm"
 
         const hoverStyles = hover
-            ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-phoenix-primary/10"
+            ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             : ""
 
         return (

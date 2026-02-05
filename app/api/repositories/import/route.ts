@@ -1,7 +1,6 @@
-import { createServerClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { fetchGitHubRepo, getLastCommitDate } from '@/lib/github/client'
+import { fetchGitHubRepo, fetchLatestCommitDate } from '@/lib/github/client'
 
 export async function POST(request: Request) {
     try {
@@ -15,17 +14,19 @@ export async function POST(request: Request) {
         }
 
         // Fetch repository data from GitHub
-        const githubRepo = await fetchGitHubRepo(repoFullName)
+        const githubRepoResult = await fetchGitHubRepo(repoFullName)
 
-        if (!githubRepo) {
+        if (!githubRepoResult.success || !githubRepoResult.data) {
             return NextResponse.json(
-                { error: 'Repository not found on GitHub' },
+                { error: githubRepoResult.error || 'Repository not found on GitHub' },
                 { status: 404 }
             )
         }
 
+        const githubRepo = githubRepoResult.data
+
         // Get last commit date
-        const lastCommitDate = await getLastCommitDate(repoFullName)
+        const lastCommitDate = await fetchLatestCommitDate(repoFullName)
 
         // Calculate abandonment status based on last commit
         const daysSinceLastCommit = lastCommitDate
@@ -50,34 +51,31 @@ export async function POST(request: Request) {
         )
 
         // Insert into Supabase
-        const cookieStore = cookies()
-        const supabase = createServerClient(cookieStore)
+        const supabase = await createClient()
 
         const { data: repository, error } = await supabase
             .from('repositories')
             .insert({
-                github_repo_id: githubRepo.id,
+                github_repo_id: githubRepo.github_repo_id,
                 full_name: githubRepo.full_name,
                 name: githubRepo.name,
                 description: githubRepo.description,
                 language: githubRepo.language,
-                stars_count: githubRepo.stargazers_count,
+                stars_count: githubRepo.stars_count,
                 forks_count: githubRepo.forks_count,
                 watchers_count: githubRepo.watchers_count,
                 open_issues_count: githubRepo.open_issues_count,
-                size_kb: githubRepo.size,
+                size_kb: githubRepo.size_kb,
                 default_branch: githubRepo.default_branch,
                 topics: githubRepo.topics || [],
-                license_name: githubRepo.license?.name,
-                homepage_url: githubRepo.homepage,
-                created_at_github: githubRepo.created_at,
+                license_name: githubRepo.license_name,
+                homepage_url: githubRepo.homepage_url,
+                created_at_github: githubRepo.created_at_github,
                 last_commit_at: lastCommitDate,
-                last_push_at: githubRepo.pushed_at,
+                last_push_at: githubRepo.last_push_at,
                 abandonment_status: abandonmentStatus,
                 maintenance_score: Math.round(maintenanceScore),
                 is_analyzed: true,
-                owner_username: githubRepo.owner.login,
-                owner_avatar_url: githubRepo.owner.avatar_url,
             })
             .select()
             .single()

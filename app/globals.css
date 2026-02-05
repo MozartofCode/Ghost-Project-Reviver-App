@@ -4,168 +4,97 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 238 76% 68%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 38 92% 50%;
-    --accent-foreground: 210 40% 98%;
+    /* Forest Green Theme - Light Mode (Default) */
+    --background: 100 20% 96%; /* Cream/Mint Tint */
+    --foreground: 145 30% 20%; /* Dark Forest Text */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 145 30% 20%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 145 30% 20%;
+    
+    --primary: 145 25% 25%; /* #2F4839 Deep Forest */
+    --primary-foreground: 135 100% 98%; /* Minty White */
+    
+    --secondary: 120 20% 90%; /* Light Green Gray */
+    --secondary-foreground: 145 30% 20%;
+    
+    --muted: 100 10% 90%;
+    --muted-foreground: 145 15% 45%;
+    
+    --accent: 130 100% 80%; /* #98FF98 Mint */
+    --accent-foreground: 145 40% 15%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 145 20% 85%;
+    --input: 145 20% 85%;
+    --ring: 145 25% 25%;
+    
+    --radius: 1.5rem; /* Larger organic radius */
+  }
+
+  /* Dark mode - Dark Forest */
+  .dark {
+    --background: 155 35% 10%; /* Very dark green/black */
+    --foreground: 135 20% 90%;
+    
+    --card: 155 30% 13%;
+    --card-foreground: 135 20% 90%;
+    
+    --popover: 155 30% 13%;
+    --popover-foreground: 135 20% 90%;
+    
+    --primary: 135 60% 50%; /* Brighter Green */
+    --primary-foreground: 155 40% 10%;
+    
+    --secondary: 155 25% 18%;
+    --secondary-foreground: 135 20% 90%;
+    
+    --muted: 155 25% 18%;
+    --muted-foreground: 135 15% 65%;
+    
+    --accent: 130 80% 70%; /* Muted Neon Mint */
+    --accent-foreground: 155 40% 10%;
+    
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 238 76% 68%;
-    --radius: 0.75rem;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    
+    --border: 155 25% 18%;
+    --input: 155 25% 18%;
+    --ring: 130 80% 70%;
   }
 }
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.1);
+    @apply border-border;
   }
-
   body {
-    background-color: #0a0e27;
-    color: hsl(var(--foreground));
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #050812;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(99, 102, 241, 0.3);
-    border-radius: 0.25rem;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(99, 102, 241, 0.5);
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-
-  /* Glassmorphism card effect */
-  .glass-card {
-    background-color: rgba(5, 8, 18, 0.7);
-    backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.5rem;
+  .organic-card {
+    @apply bg-card rounded-2xl border border-border/50 shadow-organic transition-all duration-300;
+  }
+  
+  .organic-card:hover {
+    @apply shadow-organic-hover -translate-y-1;
   }
 
-  .glass-card:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+  .btn-organic-primary {
+    @apply bg-primary text-primary-foreground rounded-full px-8 py-3 font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95;
   }
 
-  /* Gradient text */
-  .gradient-text {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6, #f59e0b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .btn-organic-secondary {
+    @apply bg-white text-forest-700 border-2 border-forest-100 rounded-full px-8 py-3 font-medium transition-all duration-300 hover:bg-forest-50 hover:border-forest-200;
   }
-
-  /* Status badges */
-  .badge-active {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    background-color: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-  }
-
-  .badge-at-risk {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    background-color: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.3);
-  }
-
-  .badge-abandoned {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    background-color: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-  }
-
-  .badge-reviving {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    background-color: rgba(99, 102, 241, 0.2);
-    color: #6366f1;
-    border: 1px solid rgba(99, 102, 241, 0.3);
-  }
-
-  /* Button styles */
-  .btn-primary {
-    padding: 0.75rem 1.5rem;
-    background-color: #6366f1;
-    color: white;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
-  }
-
-  .btn-primary:hover {
-    background-color: #818cf8;
-    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    padding: 0.75rem 1.5rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: white;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .btn-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-}
-
-@layer utilities {
-
-  /* Reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
+  
+  .text-glow {
+      text-shadow: 0 0 20px rgba(152, 255, 152, 0.4);
   }
 }
