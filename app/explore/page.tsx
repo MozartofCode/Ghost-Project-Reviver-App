@@ -169,14 +169,14 @@ export default function ExplorePage() {
                 </div>
 
                 {/* Results Count */}
-                <div className="mb-6 text-sm text-gray-400">
+                <div className="mb-6 text-sm text-forest-600">
                     {loading ? (
                         <div className="flex items-center gap-2">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             Loading repositories...
                         </div>
                     ) : (
-                        <>Showing <span className="text-white font-semibold">{repositories.length}</span> repositories</>
+                        <>Showing <span className="text-forest-900 font-bold">{repositories.length}</span> repositories</>
                     )}
                 </div>
 
