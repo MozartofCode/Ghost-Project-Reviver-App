@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { createSession } from '@/lib/auth/session'
 
 /**
@@ -76,8 +76,8 @@ export async function GET(request: NextRequest) {
             email = primaryEmail?.email || null
         }
 
-        // Create or update user in database
-        const supabase = await createClient()
+        // Create or update user in database using service role (bypasses RLS)
+        const supabase = createServiceClient()
 
         // Check if user exists
         const { data: existingUser } = await supabase

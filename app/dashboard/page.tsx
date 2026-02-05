@@ -1,38 +1,37 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { getCurrentUser, logout, User } from '@/lib/auth/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, LogOut, User, Loader2 } from 'lucide-react'
+import { Leaf, LogOut, User as UserIcon, Loader2 } from 'lucide-react'
 
 export default function DashboardPage() {
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
     const router = useRouter()
-    const supabase = createClient()
 
     useEffect(() => {
         checkUser()
     }, [])
 
     const checkUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
+        const currentUser = await getCurrentUser()
 
-        if (!user) {
+        if (!currentUser) {
             router.push('/auth/login')
             return
         }
 
-        setUser(user)
+        setUser(currentUser)
         setLoading(false)
     }
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut()
-        router.push('/')
+        await logout()
+        // logout() already redirects to home
     }
 
     if (loading) {
@@ -50,8 +49,8 @@ export default function DashboardPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <Link href="/" className="flex items-center gap-2">
-                            <Sparkles className="w-8 h-8 text-phoenix-accent" />
-                            <span className="text-xl font-bold gradient-text">Project Phoenix</span>
+                            <Leaf className="w-8 h-8 text-forest-600" />
+                            <span className="text-xl font-bold text-forest-900">Project Phoenix</span>
                         </Link>
                         <div className="flex items-center gap-4">
                             <Link href="/explore">
@@ -69,8 +68,8 @@ export default function DashboardPage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold mb-2">
-                        Welcome back, <span className="gradient-text">{user?.user_metadata?.user_name || 'Developer'}</span>
+                    <h1 className="text-4xl font-bold mb-2 text-forest-900">
+                        Welcome back, <span className="text-forest-700">{user?.username || 'Developer'}</span>
                     </h1>
                     <p className="text-gray-400">
                         Your project revival dashboard
@@ -81,20 +80,20 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <Card glass className="p-6">
                         <div className="flex items-center gap-4">
-                            {user?.user_metadata?.avatar_url ? (
+                            {user?.avatar_url ? (
                                 <img
-                                    src={user.user_metadata.avatar_url}
+                                    src={user.avatar_url}
                                     alt="Avatar"
-                                    className="w-16 h-16 rounded-full border-2 border-phoenix-primary"
+                                    className="w-16 h-16 rounded-full border-2 border-forest-600"
                                 />
                             ) : (
-                                <div className="w-16 h-16 rounded-full bg-phoenix-primary/20 flex items-center justify-center">
-                                    <User className="w-8 h-8 text-phoenix-primary" />
+                                <div className="w-16 h-16 rounded-full bg-forest-100 flex items-center justify-center">
+                                    <UserIcon className="w-8 h-8 text-forest-600" />
                                 </div>
                             )}
                             <div>
-                                <h3 className="font-semibold text-lg">{user?.user_metadata?.full_name || 'User'}</h3>
-                                <p className="text-sm text-gray-400">@{user?.user_metadata?.user_name || 'username'}</p>
+                                <h3 className="font-semibold text-lg text-forest-900">{user?.username || 'User'}</h3>
+                                <p className="text-sm text-forest-600">@{user?.username || 'username'}</p>
                             </div>
                         </div>
                     </Card>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth/session'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 /**
  * Get current authenticated user
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
             )
         }
 
-        // Fetch full user data from database
-        const supabase = await createClient()
+        // Fetch full user data from database using service client
+        const supabase = createServiceClient()
         const { data: user, error } = await supabase
             .from('users')
             .select('*')
